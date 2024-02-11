@@ -24,14 +24,14 @@ function ProjectList() {
 
 
 
-function Project(name) {
-    let name = name;
+function Project(nameValue) {
+    let name = nameValue;
     let tasks = [];
 
-    const getName = () => this.name;
+    const getName = () => name;
 
-    const setName = (name) => {
-        this.name = name;
+    const setName = (nameValue) => {
+        name = nameValue;
     };
 
     const getTasks = () => tasks;
@@ -89,12 +89,12 @@ function Task() {
 
     const getDate = () => date;
 
-    const setName = (name) => {
-        this.name = name;
+    const setName = (nameValue) => {
+        name = nameValue;
     };
 
-    const setDate = (date) => {
-        this.date = date;
+    const setDate = (dateValue) => {
+        date = dateValue;
     };
 
     return {
