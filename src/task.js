@@ -1,21 +1,40 @@
-export { TaskList , Task}
+export { ProjectList , Project , Task }
 
 
-function TaskList() {
-    let name = "";
+
+function ProjectList() {
+    let projects = {};
+
+    const getProjects = () => projects;
+
+    const addProject = (project) => {
+        projects[project.getName()] = project;
+    };
+
+    const deleteProject = (project) => {
+        delete projects[project.getName()];
+    }
+
+    return {
+        getProjects,
+        addProject,
+        deleteProject
+    };
+}
+
+
+
+function Project(name) {
+    let name = name;
     let tasks = [];
 
-    const getName = () => name;
+    const getName = () => this.name;
 
     const setName = (name) => {
         this.name = name;
     };
 
     const getTasks = () => tasks;
-
-    const setTasks = (taskList) => {
-        tasks = taskList;
-    };
 
     const addTask = (task) => {
         tasks.push(task);
@@ -52,7 +71,6 @@ function TaskList() {
         getName,
         setName,
         getTasks,
-        setTasks,
         addTask,
         sortTasks
 
