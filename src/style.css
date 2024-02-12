@@ -51,15 +51,14 @@ h2 {
 #content-container {
     grid-column: 1 / 3;
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: auto auto 1fr;
     
     
-    
-    
-
 }
 
-#sidebar {
+
+#sidebar-one , #sidebar-two {
     grid-column: 1 / 2;
     background-color: var(--primary-color);
     padding: 15px 25px;
@@ -71,15 +70,22 @@ h2 {
      
 }
 
+#content-container > h2 {
+    background-color: var(--primary-color);
+    padding: 0 25px;
+    display: grid;
+}
+
 .side-image {
     display: flex;
     align-items: center;
+    gap: 10px;
     
 }
 
 .side-image > img {
-    height: 30px;
-    width: 30px;
+    height: 20px;
+    width: 20px;
 }
 
 .side-image > p {
@@ -99,3 +105,67 @@ h2 {
     border-radius: 5px;
     background-color: #395979;
 }
+
+#main-content {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    
+}
+
+#main-header > h2 {
+    color: var(--primary-color);
+}
+
+#main-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    width: 50%;
+}
+
+#main-body > .task {
+    width: 100%;
+    
+}
+
+#main-body > .task:hover {
+    background-color: blue;
+    
+}
+
+.addtask-btn  {
+    background-color: white;
+    border: none;
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.addproject-btn {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.addproject-btn > p {
+    font-size: 16px;
+}
+
+.addtask-btn:hover {
+    background-color: blue;
+}
+
+.addtask-btn > img , .addproject-btn > img {
+    height: 20px;
+    width: 20px;
+}
+
+
