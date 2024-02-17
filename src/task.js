@@ -3,16 +3,23 @@ export { ProjectList , Project , Task }
 
 
 function ProjectList() {
-    let projects = {};
+    let projects = new Map();
 
     const getProjects = () => projects;
 
     const addProject = (project) => {
-        projects[project.getName()] = project;
+        if (projects.has(project.getName())) {
+            alert('Please choose a unique project name');
+        } else {
+            projects.set(project.getName() , project);
+            console.log(projects);
+        }
+
+        
     };
 
     const deleteProject = (project) => {
-        delete projects[project.getName()];
+        projects.delete(project.getName());
     }
 
     return {

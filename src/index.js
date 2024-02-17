@@ -67,25 +67,32 @@ function ScreenController() {
 
     const updateSidebar = () => {
         let projects = page.getDynamicProjects().getProjects();
+        let projectContainer = document.querySelector('#project-container');
+        let projectButtonContainer = document.querySelector('.project-button-holder');
         let sidebar = document.querySelector('#sidebar-two');
         
-        while (sidebar.firstChild) {
-            sidebar.removeChild(sidebar.firstChild);
+        while (projectContainer.firstChild) {
+            projectContainer.removeChild(projectContainer.firstChild);
         }
 
-        for (const project in projects) {
+        while (projectButtonContainer.firstChild) {
+            projectButtonContainer.removeChild(projectButtonContainer.firstChild);
+        }
+
+        for (const [key , value] of projects.entries()) {
             let currProj = document.createElement('button');
             currProj.classList.add('side-image');
-            currProj.innerHTML = "<img src='../images/checklist.png' alt='Picture of a green clipboard containing a green checklist'> <p>Name</p>";
-            sidebar.appendChild(currProj);
+            currProj.innerHTML = `<img src='../images/checklist.png' alt='Picture of a green clipboard containing a green checklist'> <p>${key}</p>`;
+            projectContainer.appendChild(currProj);
             
         }
         if (page.isAddProjectActive() === "false") {
-            sidebar.appendChild(createProjectBtn);
+            projectButtonContainer.appendChild(createProjectBtn);
+            
             
             
         } else {
-            sidebar.appendChild(confirmProjectBtn);
+            projectButtonContainer.appendChild(confirmProjectBtn);
             resetInputValue();
             
         }
@@ -109,6 +116,8 @@ function ScreenController() {
 
         let newProject = newProjectFromInput();
         let dynamicProjects = page.getDynamicProjects();
+        
+        
         dynamicProjects.addProject(newProject);
         updateSidebar();
         
@@ -129,3 +138,4 @@ let test = ScreenController();
 
 test.updateMainScreen();
 test.updateSidebar();
+
