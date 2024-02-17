@@ -1,6 +1,10 @@
 :root {
     --primary-color: #05386B;
     --secondary-color: #5CDB95;
+    --add-color: #aaffaa;
+    --add-border: #99dd99;
+    --cancel-color: #ffbebe;
+    --cancel-border: #eeadad;
 }
 
 * {
@@ -57,16 +61,13 @@ h2 {
     
 }
 
-
 #sidebar-one , #sidebar-two {
     grid-column: 1 / 2;
     background-color: var(--primary-color);
     padding: 15px 25px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    
-    
+    gap: 5px; 
      
 }
 
@@ -93,7 +94,7 @@ h2 {
     font-size: 16px;
     
 }
-.side-image {
+.side-image , .addproject-btn {
     padding: 10px 18px;
 }
 #general , #today , #week {
@@ -101,9 +102,10 @@ h2 {
     border: none;
 }
 
-#general:hover , #today:hover , #week:hover {
+#general:hover , #today:hover , #week:hover , .addproject-btn:hover {
     border-radius: 5px;
     background-color: #395979;
+    cursor: pointer;
 }
 
 #main-content {
@@ -168,4 +170,50 @@ h2 {
     width: 20px;
 }
 
+.addproject-popup {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.project-addcancel-btns {
+    display: flex;
+    gap: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid #395979;
+    
+}
+
+.addproject-popup > input:focus {
+    outline: none;
+}
+
+.project-add-btn , .project-cancel-btn {
+    width: 100%;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.project-add-btn {
+    background-color: var(--add-color);
+    border: none;
+}
+
+.project-cancel-btn {
+    background-color: var(--cancel-color);
+    border: 1px solid var(--cancel-border);
+}
+
+.inactive {
+    display: none;
+    
+}
