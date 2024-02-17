@@ -1,26 +1,46 @@
 import './style.css';
 import { PageController } from "./pagecontroller.js";
 import { ProjectList , Project , Task } from './task.js';
+import { createTaskButton , createProjectButton , createConfirmProjectButton , getText , newProjectFromInput , resetInputValue} from './interface.js';
 
 
 
 
 
 function ScreenController() {
-    const page = PageController();
     const mainHeader = document.querySelector('#main-header');
-    const content = document.querySelector("#main-body");
+    const page = PageController();
+    let activeSidebar = page.getActiveSidebar();
+    const dynamicProjects = page.getDynamicProjects();
+    const createProjectBtn = createProjectButton();
+    const confirmProjectBtn = createConfirmProjectButton();
     
 
-    const updateScreen = () => {
+    
+    createProjectBtn.addEventListener('click' , toggleAddProjectListener);
+    confirmProjectBtn.querySelector('.project-add-btn').addEventListener('click' , addProjectConfirmListener); 
+    confirmProjectBtn.querySelector('.project-cancel-btn').addEventListener('click' , toggleAddProjectListener);
+    
+    
 
+    
+    const addProject = document.querySelector('.addproject-btn');
+    const addProjectPopup = document.querySelector('.addproject-popup');
+    const projectAddBtn = document.querySelector('.project-add-btn');
+    const projectCancelBtn = document.querySelector('.project-cancel-btn');
+    
+    
+    
+
+
+
+    
+    
+
+    const updateMainScreen = () => {
+        let content = document.querySelector("#main-body");
         let activeProject = page.getActiveProject();
-        let test1 = Task();
-        test1.setName("test1");
-        let test2 = Task();
-        test2.setName("test2");
-        activeProject.addTask(test1);
-        activeProject.addTask(test2);
+        
 
         while(content.firstChild) {
             content.removeChild(content.firstChild);
@@ -38,13 +58,74 @@ function ScreenController() {
             
         }
 
+        let button = createTaskButton();
+        button.style.fontSize = "16px";
+        content.appendChild(button);
+
+
     }
 
+    const updateSidebar = () => {
+        let projects = page.getDynamicProjects().getProjects();
+        let sidebar = document.querySelector('#sidebar-two');
+        
+        while (sidebar.firstChild) {
+            sidebar.removeChild(sidebar.firstChild);
+        }
+
+        for (const project in projects) {
+            let currProj = document.createElement('button');
+            currProj.classList.add('side-image');
+            currProj.innerHTML = "<img src='../images/checklist.png' alt='Picture of a green clipboard containing a green checklist'> <p>Name</p>";
+            sidebar.appendChild(currProj);
+            
+        }
+        if (page.isAddProjectActive() === "false") {
+            sidebar.appendChild(createProjectBtn);
+            
+            
+        } else {
+            sidebar.appendChild(confirmProjectBtn);
+            resetInputValue();
+            
+        }
+          
+    }
+
+    
+
+    
+
+    function toggleAddProjectListener(e) {
+        let result = e.target.dataset.state;
+        page.setAddProjectActive(result);
+        updateSidebar();
+           
+    }
+
+    function addProjectConfirmListener(e) {
+        let result = e.target.dataset.state;
+        page.setAddProjectActive(result);
+
+        let newProject = newProjectFromInput();
+        let dynamicProjects = page.getDynamicProjects();
+        dynamicProjects.addProject(newProject);
+        updateSidebar();
+        
+
+    }
+    
+    
     return {
-        updateScreen
+        updateMainScreen,
+        updateSidebar
     }
 
 }
 
+
+
 let test = ScreenController();
-test.updateScreen();
+
+test.updateMainScreen();
+test.updateSidebar();
