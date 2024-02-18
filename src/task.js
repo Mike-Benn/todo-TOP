@@ -1,7 +1,6 @@
 export { ProjectList , Project , Task }
 
 
-
 function ProjectList() {
     let projects = new Map();
 
@@ -12,10 +11,8 @@ function ProjectList() {
             alert('Please choose a unique project name');
         } else {
             projects.set(project.getName() , project);
-            console.log(projects);
-        }
-
-        
+            
+        }   
     };
 
     const deleteProject = (project) => {
@@ -28,8 +25,6 @@ function ProjectList() {
         deleteProject
     };
 }
-
-
 
 function Project(nameValue) {
     let name = nameValue;
@@ -71,7 +66,6 @@ function Project(nameValue) {
         }
         tasks = sorted;
 
-
     };
 
     return {
@@ -83,10 +77,7 @@ function Project(nameValue) {
 
     };
 
-    
-
 }
-
 
 function Task() {
     let name = "";
