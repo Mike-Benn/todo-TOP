@@ -10,13 +10,17 @@ import { createTaskButton , createProjectButton , createConfirmProjectButton , g
 function ScreenController() {
     const mainHeader = document.querySelector('#main-header');
     const page = PageController();
-    let activeSidebar = page.getActiveSidebar();
     const dynamicProjects = page.getDynamicProjects();
     const createProjectBtn = createProjectButton();
     const confirmProjectBtn = createConfirmProjectButton();
+    const generalButton = document.querySelector('#General');
+    const todayButton = document.querySelector('#Today');
+    const weeklyButton = document.querySelector('#Weekly');
     
 
-    
+    generalButton.addEventListener('click' , setActiveProjectListener);
+    todayButton.addEventListener('click' , setActiveProjectListener);
+    weeklyButton.addEventListener('click' , setActiveProjectListener);
     createProjectBtn.addEventListener('click' , toggleAddProjectListener);
     confirmProjectBtn.querySelector('.project-add-btn').addEventListener('click' , addProjectConfirmListener); 
     confirmProjectBtn.querySelector('.project-cancel-btn').addEventListener('click' , toggleAddProjectListener);
@@ -24,10 +28,7 @@ function ScreenController() {
     
 
     
-    const addProject = document.querySelector('.addproject-btn');
-    const addProjectPopup = document.querySelector('.addproject-popup');
-    const projectAddBtn = document.querySelector('.project-add-btn');
-    const projectCancelBtn = document.querySelector('.project-cancel-btn');
+    
     
     
     
@@ -38,14 +39,20 @@ function ScreenController() {
     
 
     const updateMainScreen = () => {
-        let content = document.querySelector("#main-body");
+        let headerContainer = document.querySelector('#main-header')
+        let contentContainer = document.querySelector('#main-body');
         let activeProject = page.getActiveProject();
         
 
-        while(content.firstChild) {
-            content.removeChild(content.firstChild);
+        while (headerContainer .firstChild) {
+            headerContainer.removeChild(headerContainer.firstChild);
+        }
+
+        while (contentContainer.firstChild) {
+            contentContainer.removeChild(contentContainer.firstChild);
 
         }
+
         let header = document.createElement('h2');
         header.textContent = activeProject.getName(); 
         mainHeader.appendChild(header);
@@ -54,23 +61,28 @@ function ScreenController() {
             let currTask = document.createElement('div');
             currTask.classList.add('task');
             currTask.textContent = task.getName();
-            content.appendChild(currTask);
+            contentContainer.appendChild(currTask);
             
         }
 
         let button = createTaskButton();
         button.style.fontSize = "16px";
-        content.appendChild(button);
+        contentContainer.appendChild(button);
 
 
     }
 
     const updateSidebar = () => {
-        let projects = page.getDynamicProjects().getProjects();
+        
+        let activeProject = page.getActiveProject();
+        let staticProjects = page.getStaticProjects().getProjects();
+        let dynamicProjects = page.getDynamicProjects().getProjects();
         let projectContainer = document.querySelector('#project-container');
         let projectButtonContainer = document.querySelector('.project-button-holder');
-        let sidebar = document.querySelector('#sidebar-two');
         
+        
+
+
         while (projectContainer.firstChild) {
             projectContainer.removeChild(projectContainer.firstChild);
         }
@@ -79,11 +91,30 @@ function ScreenController() {
             projectButtonContainer.removeChild(projectButtonContainer.firstChild);
         }
 
-        for (const [key , value] of projects.entries()) {
+        for (const [key , value] of staticProjects.entries()) {
+            if (activeProject.getName() === key) {
+                page.getActiveProjectElement().classList.remove('active');
+                let activeElement = document.querySelector(`#${key}`)
+                activeElement.classList.add('active');
+                page.setActiveProjectElement(activeElement);
+            }
+        }
+
+        for (const [key , value] of dynamicProjects.entries()) {
+            
             let currProj = document.createElement('button');
             currProj.classList.add('side-image');
-            currProj.innerHTML = `<img src='../images/checklist.png' alt='Picture of a green clipboard containing a green checklist'> <p>${key}</p>`;
+            currProj.dataset.value = key;
+            currProj.id = `${key}`;
+            currProj.innerHTML = `<img src='../images/checklist.png' alt='Picture of a green clipboard containing a green checklist' data-value='${key}'> <p data-value=${key}>${key}</p>`;
+            currProj.addEventListener('click' , setActiveProjectListener);
             projectContainer.appendChild(currProj);
+            if (activeProject.getName() === key) {
+                page.getActiveProjectElement().classList.remove('active');
+                let activeElement = document.getElementById(key);
+                activeElement.classList.add('active');
+                page.setActiveProjectElement(activeElement);    
+            }
             
         }
         if (page.isAddProjectActive() === "false") {
@@ -110,6 +141,11 @@ function ScreenController() {
            
     }
 
+    function toggleAddTaskListener(e) {
+        let result = e.target.dataset.state;
+        
+    }
+
     function addProjectConfirmListener(e) {
         let result = e.target.dataset.state;
         page.setAddProjectActive(result);
@@ -121,9 +157,21 @@ function ScreenController() {
         dynamicProjects.addProject(newProject);
         updateSidebar();
         
-
     }
-    
+
+    function setActiveProjectListener(e) {
+        let staticProjects = page.getStaticProjects().getProjects();
+        let dynamicProjects = page.getDynamicProjects().getProjects();
+        
+        if (staticProjects.has(e.target.dataset.value)) {
+            page.setActiveProject(staticProjects.get(e.target.dataset.value))
+            
+        } else {
+            page.setActiveProject(dynamicProjects.get(e.target.dataset.value));
+               
+        }
+        updateSidebar();
+    }
     
     return {
         updateMainScreen,
