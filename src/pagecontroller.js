@@ -4,10 +4,12 @@ export { PageController };
 
 function PageController() {
     let general = Project("General");
+    let generalElement = document.querySelector('#General');
     let today = Project("Today");
     let weekly = Project("Weekly");
 
     let activeProject = general;
+    let activeProjectElement = generalElement;
     let activeSidebar = general.getName();
     let addProjectActive = "false";
     let staticProjects = ProjectList();
@@ -19,7 +21,7 @@ function PageController() {
 
     const getActiveProject = () => activeProject;
 
-    const getActiveSidebar = () => activeSidebar;
+    const getActiveProjectElement = () => activeProjectElement;
 
     const isAddProjectActive = () => addProjectActive;
 
@@ -30,6 +32,10 @@ function PageController() {
     const setActiveProject = (project) => {
         activeProject = project;
         
+    };
+
+    const setActiveProjectElement = (element) => {
+        activeProjectElement = element;
     }
 
     const setAddProjectActive = (value) => {
@@ -40,11 +46,12 @@ function PageController() {
 
     return {
         getActiveProject,
-        getActiveSidebar,
+        getActiveProjectElement,
         isAddProjectActive,
         getStaticProjects,
         getDynamicProjects,
         setActiveProject,
+        setActiveProjectElement,
         setAddProjectActive
         
     };
