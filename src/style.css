@@ -103,12 +103,13 @@ h2 {
 .side-image {
     background-color: var(--primary-color);
     border: none;
+    border-radius: 5px;
 }
 
-#general:hover , #today:hover , #week:hover , .addproject-btn:hover , .side-image:hover{
-    border-radius: 5px;
+#General:hover , #Today:hover , #Weekly:hover , .addproject-btn:hover , .side-image:hover{
     background-color: #395979;
     cursor: pointer;
+
 }
 
 #main-content {
@@ -140,7 +141,11 @@ h2 {
     
 }
 
-
+#project-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
 .addtask-btn  {
     background-color: white;
@@ -161,6 +166,7 @@ h2 {
     align-items: center;
     gap: 10px;
     width: 100%;
+    border-radius: 5px;
 }
 
 .addproject-btn > p {
@@ -169,6 +175,7 @@ h2 {
 
 .addtask-btn:hover {
     background-color: var(--lighthover-color);
+    cursor: pointer;
 }
 
 .addtask-btn > img , .addproject-btn > img {
@@ -223,3 +230,8 @@ input {
     display: none;
     
 }
+
+.active {
+    background-color: var(--darkhover-color);
+}
+
