@@ -9,6 +9,8 @@ function ProjectList() {
     const addProject = (project) => {
         if (projects.has(project.getName())) {
             alert('Please choose a unique project name');
+        } else if (project.getName().length < 1) {
+            alert('Please choose a name for your project');
         } else {
             projects.set(project.getName() , project);
             
@@ -39,7 +41,11 @@ function Project(nameValue) {
     const getTasks = () => tasks;
 
     const addTask = (task) => {
+        if (task.getName().length < 1) {
+            alert('Please choose a name for your task');
+        } else {
         tasks.push(task);
+        }
 
     };
 
@@ -79,8 +85,8 @@ function Project(nameValue) {
 
 }
 
-function Task() {
-    let name = "";
+function Task(value) {
+    let name = value;
     let date = new Date();
 
     const getName = () => name;
