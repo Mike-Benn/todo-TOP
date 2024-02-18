@@ -133,7 +133,7 @@ h2 {
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    width: 50%;
+    width: 80%;
 }
 
 #main-body > .task {
@@ -173,7 +173,7 @@ h2 {
     font-size: 16px;
 }
 
-.addtask-btn:hover {
+.addtask-btn:hover , .task:hover {
     background-color: var(--lighthover-color);
     cursor: pointer;
 }
@@ -226,6 +226,21 @@ input {
     border: 1px solid var(--cancel-border);
 }
 
+#task-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.task {
+    width: 100%;
+}
+
+.task-button-holder {
+    display: flex;
+    width: 100%;
+}
+
 .inactive {
     display: none;
     
@@ -234,4 +249,6 @@ input {
 .active {
     background-color: var(--darkhover-color);
 }
+
+
 
