@@ -1,10 +1,14 @@
 import './style.css';
 import { PageController } from "./pagecontroller.js";
 import { ProjectList , Project , Task } from './task.js';
-import { createTaskButton , createProjectButton , createConfirmProjectButton , getText , newProjectFromInput , resetInputValue} from './interface.js';
+import { createTaskButton , createProjectButton , createConfirmProjectButton , newTaskFromInput , newProjectFromInput , resetProjectInputValue , resetTaskInputValue , createConfirmTaskButton} from './interface.js';
 
 
+// Bugs:
 
+// Possible to create blank tasks and projects
+// Possible to create too long of name tasks
+// Possible to create duplicate tasks - maybe ok?
 
 
 function ScreenController() {
@@ -13,6 +17,8 @@ function ScreenController() {
     const dynamicProjects = page.getDynamicProjects();
     const createProjectBtn = createProjectButton();
     const confirmProjectBtn = createConfirmProjectButton();
+    const createTaskBtn = createTaskButton();
+    const confirmTaskBtn = createConfirmTaskButton();
     const generalButton = document.querySelector('#General');
     const todayButton = document.querySelector('#Today');
     const weeklyButton = document.querySelector('#Weekly');
@@ -24,6 +30,9 @@ function ScreenController() {
     createProjectBtn.addEventListener('click' , toggleAddProjectListener);
     confirmProjectBtn.querySelector('.project-add-btn').addEventListener('click' , addProjectConfirmListener); 
     confirmProjectBtn.querySelector('.project-cancel-btn').addEventListener('click' , toggleAddProjectListener);
+    createTaskBtn.addEventListener('click' , toggleAddTaskListener);
+    confirmTaskBtn.querySelector('.project-add-btn').addEventListener('click' , addTaskConfirmListener);
+    confirmTaskBtn.querySelector('.project-cancel-btn').addEventListener('click' , toggleAddTaskListener);
     
     
 
@@ -39,8 +48,10 @@ function ScreenController() {
     
 
     const updateMainScreen = () => {
-        let headerContainer = document.querySelector('#main-header')
+        let headerContainer = document.querySelector('#main-header');
         let contentContainer = document.querySelector('#main-body');
+        let taskContainer = document.querySelector('#task-container');
+        let taskButtonContainer = document.querySelector('.task-button-holder');
         let activeProject = page.getActiveProject();
         
 
@@ -48,9 +59,13 @@ function ScreenController() {
             headerContainer.removeChild(headerContainer.firstChild);
         }
 
-        while (contentContainer.firstChild) {
-            contentContainer.removeChild(contentContainer.firstChild);
+        while (taskContainer.firstChild) {
+            taskContainer.removeChild(taskContainer.firstChild);
 
+        }
+
+        while (taskButtonContainer.firstChild) {
+            taskButtonContainer.removeChild(taskButtonContainer.firstChild);
         }
 
         let header = document.createElement('h2');
@@ -61,13 +76,23 @@ function ScreenController() {
             let currTask = document.createElement('div');
             currTask.classList.add('task');
             currTask.textContent = task.getName();
-            contentContainer.appendChild(currTask);
+            taskContainer.appendChild(currTask);
             
         }
 
-        let button = createTaskButton();
-        button.style.fontSize = "16px";
-        contentContainer.appendChild(button);
+
+        if (page.isAddTaskActive() === "false") {
+            
+            
+            taskButtonContainer.appendChild(createTaskBtn);
+            
+            
+            
+        } else {
+            taskButtonContainer.appendChild(confirmTaskBtn);
+            resetTaskInputValue();
+            
+        }
 
 
     }
@@ -124,7 +149,7 @@ function ScreenController() {
             
         } else {
             projectButtonContainer.appendChild(confirmProjectBtn);
-            resetInputValue();
+            resetProjectInputValue();
             
         }
           
@@ -136,14 +161,20 @@ function ScreenController() {
 
     function toggleAddProjectListener(e) {
         let result = e.target.dataset.state;
+        page.setAddTaskActive("false");
         page.setAddProjectActive(result);
         updateSidebar();
+        updateMainScreen();
            
     }
 
     function toggleAddTaskListener(e) {
         let result = e.target.dataset.state;
-        
+        page.setAddProjectActive("false");
+        page.setAddTaskActive(result);
+        updateSidebar();
+        updateMainScreen();
+
     }
 
     function addProjectConfirmListener(e) {
@@ -153,11 +184,35 @@ function ScreenController() {
         let newProject = newProjectFromInput();
         let dynamicProjects = page.getDynamicProjects();
         
-        
         dynamicProjects.addProject(newProject);
         updateSidebar();
+        updateMainScreen();
         
     }
+
+    function addTaskConfirmListener(e) {
+        let result = e.target.dataset.state;
+        page.setAddTaskActive(result);
+
+        let newTask = newTaskFromInput();
+        let activeProject = page.getActiveProject();
+
+        activeProject.addTask(newTask);
+        let staticProjects = page.getStaticProjects();
+        let dynamicProjects = page.getDynamicProjects();
+        if (staticProjects.getProjects().has(activeProject.getName())) {
+            staticProjects.getProjects().set(activeProject.getName() , activeProject);
+            page.setActiveProject(activeProject);
+        } else {
+            dynamicProjects.getProjects().set(activeProject.getName() , activeProject);
+            page.setActiveProject(activeProject);
+        }
+        updateSidebar();
+        updateMainScreen();
+
+        
+    }
+
 
     function setActiveProjectListener(e) {
         let staticProjects = page.getStaticProjects().getProjects();
@@ -170,7 +225,11 @@ function ScreenController() {
             page.setActiveProject(dynamicProjects.get(e.target.dataset.value));
                
         }
+        page.setAddTaskActive("false");
+        page.setAddProjectActive("false");
         updateSidebar();
+        updateMainScreen();
+        
     }
     
     return {
