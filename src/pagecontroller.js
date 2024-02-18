@@ -12,6 +12,7 @@ function PageController() {
     let activeProjectElement = generalElement;
     let activeSidebar = general.getName();
     let addProjectActive = "false";
+    let addTaskActive = "false";
     let staticProjects = ProjectList();
     staticProjects.addProject(general);
     staticProjects.addProject(today);
@@ -24,6 +25,8 @@ function PageController() {
     const getActiveProjectElement = () => activeProjectElement;
 
     const isAddProjectActive = () => addProjectActive;
+
+    const isAddTaskActive = () => addTaskActive;
 
     const getStaticProjects = () => staticProjects;
 
@@ -44,15 +47,21 @@ function PageController() {
         
     }
 
+    const setAddTaskActive = (value) => {
+        addTaskActive = value;
+    }
+
     return {
         getActiveProject,
         getActiveProjectElement,
         isAddProjectActive,
+        isAddTaskActive,
         getStaticProjects,
         getDynamicProjects,
         setActiveProject,
         setActiveProjectElement,
-        setAddProjectActive
+        setAddProjectActive,
+        setAddTaskActive
         
     };
 
