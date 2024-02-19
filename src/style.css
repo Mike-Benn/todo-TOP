@@ -277,9 +277,7 @@ input {
     display: none;
 }
 
-.side-image:hover > .delete-button {
-    display: inline-block;
-}
+
 
 .inactive {
     display: none;
@@ -290,5 +288,7 @@ input {
     background-color: var(--darkhover-color);
 }
 
-
+.side-image:hover > .delete-button {
+    display: inline-block;
+}
 
