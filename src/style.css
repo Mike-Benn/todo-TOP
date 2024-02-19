@@ -87,12 +87,17 @@ h2 {
     
 }
 
-.side-image > img {
+#project-container > .side-image {
+    justify-content: space-between;
+}
+
+
+.side-image > img , .project-name-container > img {
     height: 20px;
     width: 20px;
 }
 
-.side-image > p {
+.side-image > p , .project-name-container > p {
     color: var(--secondary-color);
     font-size: 16px;
     
@@ -106,7 +111,17 @@ h2 {
     border-radius: 5px;
 }
 
-#General:hover , #Today:hover , #Weekly:hover , .addproject-btn:hover , .side-image:hover{
+.project-name-container {
+    display: flex;
+    gap: 10px;
+}
+
+button > img {
+    height: 10px;
+    width: 10px;
+}
+
+#General:hover , #Today:hover , #Weekly:hover , .addproject-btn:hover , .side-image:hover , .side-image:hover > * {
     background-color: #395979;
     cursor: pointer;
 
@@ -227,6 +242,15 @@ input {
     border: 1px solid var(--cancel-border);
 }
 
+.project-name {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
+
 #task-container {
     width: 100%;
     display: flex;
@@ -245,12 +269,24 @@ input {
     width: 100%;
 }
 
+
+
+.delete-button {
+    background-color: var(--primary-color);
+    border: none;
+    display: none;
+}
+
+.side-image:hover > .delete-button {
+    display: inline-block;
+}
+
 .inactive {
     display: none;
     
 }
 
-.active {
+.active , .active > * {
     background-color: var(--darkhover-color);
 }
 
