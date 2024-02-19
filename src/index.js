@@ -1,7 +1,7 @@
 import './style.css';
 import { PageController } from "./pagecontroller.js";
 import { ProjectList , Project , Task } from './task.js';
-import { createTaskButton , createProjectButton , createConfirmProjectButton , newTaskFromInput , newProjectFromInput , resetProjectInputValue , resetTaskInputValue , createConfirmTaskButton} from './interface.js';
+import { createTaskButton , createProjectButton , createConfirmProjectButton , createDeleteButton , newTaskFromInput , newProjectFromInput , resetProjectInputValue , resetTaskInputValue , createConfirmTaskButton} from './interface.js';
 
 
 // Bugs:
@@ -126,14 +126,33 @@ function ScreenController() {
         }
 
         for (const [key , value] of dynamicProjects.entries()) {
-            
             let currProj = document.createElement('button');
             currProj.classList.add('side-image');
             currProj.dataset.value = key;
             currProj.id = `${key}`;
-            currProj.innerHTML = `<img src='../images/checklist.png' alt='Picture of a green clipboard containing a green checklist' data-value='${key}'> <p data-value=${key}>${key}</p>`;
             currProj.addEventListener('click' , setActiveProjectListener);
+
+            let projectNameContainer = document.createElement('div');
+            projectNameContainer.classList.add('project-name-container');
+
+            let projectImage = document.createElement('img');
+            projectImage.src = '../images/checklist.png';
+            projectImage.alt = 'Picture of a green clipboard containing a green checklist';
+            projectImage.dataset.value = `${key}`;
+
+            let projectName = document.createElement('p');
+            projectName.textContent = `${key}`;
+            projectName.dataset.value = `${key}`;
+
+            let deleteButton = createDeleteButton();
+
+            projectNameContainer.appendChild(projectImage);
+            projectNameContainer.appendChild(projectName);
+            currProj.appendChild(projectNameContainer);
+            currProj.appendChild(deleteButton);
             projectContainer.appendChild(currProj);
+            
+
             if (activeProject.getName() === key) {
                 page.getActiveProjectElement().classList.remove('active');
                 let activeElement = document.getElementById(key);
