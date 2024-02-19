@@ -35,7 +35,7 @@ function ScreenController() {
     confirmTaskBtn.querySelector('.project-cancel-btn').addEventListener('click' , toggleAddTaskListener);
     
     
-
+    console.log(page.getActiveProject().getName());
     
     
     
@@ -68,31 +68,34 @@ function ScreenController() {
             taskButtonContainer.removeChild(taskButtonContainer.firstChild);
         }
 
-        let header = document.createElement('h2');
-        header.textContent = activeProject.getName(); 
-        mainHeader.appendChild(header);
+        if (activeProject) {
+            let header = document.createElement('h2');
+            header.textContent = activeProject.getName();
+            mainHeader.appendChild(header);
 
-        for (const task of activeProject.getTasks()) {
-            let currTask = document.createElement('div');
-            currTask.classList.add('task');
-            currTask.textContent = task.getName();
-            taskContainer.appendChild(currTask);
+            for (const task of activeProject.getTasks()) {
+                let currTask = document.createElement('div');
+                currTask.classList.add('task');
+                currTask.textContent = task.getName();
+                taskContainer.appendChild(currTask);
+            }
+        } 
+        
+        if (page.getActiveProject()) {
+            if (page.isAddTaskActive() === "false") {
             
+            
+                taskButtonContainer.appendChild(createTaskBtn);
+                
+                
+                
+            } else {
+                taskButtonContainer.appendChild(confirmTaskBtn);
+                resetTaskInputValue();
+                
+            }    
         }
-
-
-        if (page.isAddTaskActive() === "false") {
-            
-            
-            taskButtonContainer.appendChild(createTaskBtn);
-            
-            
-            
-        } else {
-            taskButtonContainer.appendChild(confirmTaskBtn);
-            resetTaskInputValue();
-            
-        }
+        
 
 
     }
@@ -105,9 +108,6 @@ function ScreenController() {
         let projectContainer = document.querySelector('#project-container');
         let projectButtonContainer = document.querySelector('.project-button-holder');
         
-        
-
-
         while (projectContainer.firstChild) {
             projectContainer.removeChild(projectContainer.firstChild);
         }
@@ -116,12 +116,15 @@ function ScreenController() {
             projectButtonContainer.removeChild(projectButtonContainer.firstChild);
         }
 
-        for (const [key , value] of staticProjects.entries()) {
-            if (activeProject.getName() === key) {
-                page.getActiveProjectElement().classList.remove('active');
-                let activeElement = document.querySelector(`#${key}`)
-                activeElement.classList.add('active');
-                page.setActiveProjectElement(activeElement);
+        if (activeProject) {
+            for (const [key , value] of staticProjects.entries()) {
+                if (activeProject.getName() === key) {
+                    page.getActiveProjectElement().classList.remove('active');
+                    let activeElement = document.querySelector(`#${key}`)
+                    activeElement.classList.add('active');
+                    page.setActiveProjectElement(activeElement);
+                    
+                }
             }
         }
 
@@ -145,6 +148,9 @@ function ScreenController() {
             projectName.dataset.value = `${key}`;
 
             let deleteButton = createDeleteButton();
+            deleteButton.dataset.value = `${key}`;
+            deleteButton.querySelector('img').dataset.value = `${key}`;
+            deleteButton.addEventListener('click' , deleteProjectListener);
 
             projectNameContainer.appendChild(projectImage);
             projectNameContainer.appendChild(projectName);
@@ -152,12 +158,14 @@ function ScreenController() {
             currProj.appendChild(deleteButton);
             projectContainer.appendChild(currProj);
             
-
-            if (activeProject.getName() === key) {
-                page.getActiveProjectElement().classList.remove('active');
-                let activeElement = document.getElementById(key);
-                activeElement.classList.add('active');
-                page.setActiveProjectElement(activeElement);    
+            if (page.getActiveProject()) {
+                if (activeProject.getName() === key) {
+                    page.getActiveProjectElement().classList.remove('active');
+                    let activeElement = document.getElementById(key);
+                    activeElement.classList.add('active');
+                    page.setActiveProjectElement(activeElement);
+                    
+                }
             }
             
         }
@@ -238,10 +246,15 @@ function ScreenController() {
         let dynamicProjects = page.getDynamicProjects().getProjects();
         
         if (staticProjects.has(e.target.dataset.value)) {
-            page.setActiveProject(staticProjects.get(e.target.dataset.value))
+            page.setActiveProject(staticProjects.get(e.target.dataset.value));
+            console.log(page.getActiveProject().getName());
+            
             
         } else {
             page.setActiveProject(dynamicProjects.get(e.target.dataset.value));
+            console.log(page.getActiveProject().getName());
+            
+            
                
         }
         page.setAddTaskActive("false");
@@ -251,6 +264,26 @@ function ScreenController() {
         
     }
     
+    function deleteProjectListener(e) {
+        e.stopPropagation();
+        let valueToRemove = e.target.dataset.value;
+        let dynamicProjects = page.getDynamicProjects().getProjects();
+
+        dynamicProjects.delete(valueToRemove);
+
+        if (page.getActiveProject()) {
+            if (page.getActiveProject().getName() === valueToRemove) {
+                page.setActiveProject(undefined);
+            }
+        } 
+        updateSidebar();
+        updateMainScreen();
+        
+        
+
+
+    }
+
     return {
         updateMainScreen,
         updateSidebar
