@@ -1,5 +1,5 @@
 import { Project , Task } from "./task";
-export { createTaskButton , createProjectButton , createConfirmProjectButton , createConfirmTaskButton , getProjectText , newProjectFromInput , newTaskFromInput , resetProjectInputValue , resetTaskInputValue }
+export { createTaskButton , createProjectButton , createConfirmProjectButton , createConfirmTaskButton , createDeleteButton , getProjectText , newProjectFromInput , newTaskFromInput , resetProjectInputValue , resetTaskInputValue }
 
 function createTaskButton() {
     let button = document.createElement('button');
@@ -26,6 +26,7 @@ function createConfirmTaskButton() {
     input.name = 'TaskName';
     input.id = 'task_name';
     input.value = '';
+    input.setAttribute("maxlength" , "45");
 
     let buttonContainer = document.createElement('div');
     buttonContainer.classList.add('project-addcancel-btns');
@@ -59,6 +60,7 @@ function createConfirmProjectButton() {
     input.name = 'ProjectName';
     input.id = 'project_name';
     input.value = '';
+    input.setAttribute("maxlength" , "20");
     
 
     let buttonContainer = document.createElement('div');
@@ -124,4 +126,12 @@ function resetProjectInputValue() {
 function resetTaskInputValue() {
     let taskInput = document.querySelector('#task_name');
     taskInput.value = "";
+}
+
+function createDeleteButton() {
+    let deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.innerHTML = "<img src='../images/x.png' alt='Picture of a green X'>";
+    return deleteButton;
+
 }
