@@ -72,12 +72,28 @@ function ScreenController() {
             let header = document.createElement('h2');
             header.textContent = activeProject.getName();
             mainHeader.appendChild(header);
-
-            for (const task of activeProject.getTasks()) {
+            
+            
+            for (const [key , value] of activeProject.getTasks().entries()) {
+                let taskHolder = document.createElement('div');
+                taskHolder.classList.add('task-holder');
+                
+                let deleteButton = createDeleteButton();
+                deleteButton.dataset.value = `${key}`;
+                deleteButton.querySelector('img').dataset.value = `${key}`;
+                deleteButton.querySelector('img').src = '../images/x-black.png';
+                deleteButton.querySelector('img').alt = 'Picture of a black X';
+                deleteButton.addEventListener('click' , deleteTaskListener);
+                
                 let currTask = document.createElement('div');
                 currTask.classList.add('task');
-                currTask.textContent = task.getName();
-                taskContainer.appendChild(currTask);
+                currTask.textContent = key;
+
+                taskHolder.appendChild(currTask);
+                taskHolder.appendChild(deleteButton);
+                taskContainer.appendChild(taskHolder);
+
+
             }
         } 
         
@@ -266,23 +282,31 @@ function ScreenController() {
     
     function deleteProjectListener(e) {
         e.stopPropagation();
-        let valueToRemove = e.target.dataset.value;
+        let projectToRemove = e.target.dataset.value;
         let dynamicProjects = page.getDynamicProjects().getProjects();
 
-        dynamicProjects.delete(valueToRemove);
+        dynamicProjects.delete(projectToRemove);
 
         if (page.getActiveProject()) {
-            if (page.getActiveProject().getName() === valueToRemove) {
+            if (page.getActiveProject().getName() === projectToRemove) {
                 page.setActiveProject(undefined);
             }
         } 
         updateSidebar();
         updateMainScreen();
         
-        
-
-
     }
+
+    function deleteTaskListener(e) {
+        e.stopPropagation();
+        let taskToRemove = e.target.dataset.value;
+        let tasks = page.getActiveProject().getTasks();
+
+        tasks.delete(taskToRemove);
+        updateMainScreen();
+        
+    }
+
 
     return {
         updateMainScreen,
