@@ -169,8 +169,8 @@ button > img {
     align-items: center;
     width: 100%;
     gap: 15px;
-    padding: 10px 18px;
     border-radius: 5px;
+    padding: 10px 18px;
 }
 
 .addproject-btn {
@@ -188,7 +188,7 @@ button > img {
     font-size: 16px;
 }
 
-.addtask-btn:hover , .task:hover {
+.addtask-btn:hover , .task-holder:hover , .task-holder:hover > * {
     background-color: var(--lighthover-color);
     cursor: pointer;
 }
@@ -255,18 +255,35 @@ input {
     width: 100%;
     display: flex;
     flex-direction: column;
+    
+    
+    
+
+}
+
+
+
+.task-holder {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 18px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    
 }
 
 .task {
     width: 100%;
     border-radius: 5px;
-    padding: 10px 18px;
     font-weight: bold;
 }
 
 .task-button-holder {
     display: flex;
     width: 100%;
+    
+    
 }
 
 
@@ -288,7 +305,7 @@ input {
     background-color: var(--darkhover-color);
 }
 
-.side-image:hover > .delete-button {
+.side-image:hover > .delete-button , .task-holder:hover > .delete-button {
     display: inline-block;
 }
 
