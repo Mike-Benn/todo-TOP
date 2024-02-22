@@ -30,7 +30,7 @@ function ProjectList() {
 
 function Project(nameValue) {
     let name = nameValue;
-    let tasks = [];
+    let tasks = new Map();
 
     const getName = () => name;
 
@@ -43,8 +43,10 @@ function Project(nameValue) {
     const addTask = (task) => {
         if (task.getName().length < 1) {
             alert('Please choose a name for your task');
+        } else if (tasks.has(task.getName())) {
+            alert('Please choose a unique name for your task');
         } else {
-        tasks.push(task);
+            tasks.set(task.getName() , task);
         }
 
     };
